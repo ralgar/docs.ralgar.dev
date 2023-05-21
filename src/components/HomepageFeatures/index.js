@@ -20,7 +20,7 @@ const FeatureList = [
     description: (
       <>
         The DevOps process lets you focus on making continual, iterative
-        improvements in automated, reproducible environment. This in
+        improvements in automated, reproducible environments. This in
         turn leads to...
       </>
     ),
