@@ -1,0 +1,8 @@
+{
+  "label": "Homelab",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Let's discover how I operate my homelab, and how you can operate one too!"
+  }
+}
