@@ -39,15 +39,12 @@ node:build:
 container:release:
   stage: release
   image: quay.io/containers/buildah:latest
-  variables:
-    # Tag container with Unix epoch timestamp
-    CONTAINER_TAG: $(date +%s)
   before_script:
     - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
+    - export CONTAINER_TAG=$(date +%Y-%m-%d)-ci${CI_PIPELINE_IID}
     - buildah build -t $CI_PROJECT_NAME:latest
-    - buildah tag $CI_PROJECT_NAME:latest $CI_REGISTRY_IMAGE:latest
-    - buildah tag $CI_PROJECT_NAME:latest $CI_REGISTRY_IMAGE:${CONTAINER_TAG}
-  after_script:
-    - buildah push $CI_REGISTRY_IMAGE:latest
-    - buildah push $CI_REGISTRY_IMAGE:${CONTAINER_TAG}
+    - buildah tag $CI_PROJECT_NAME:latest $CI_REGISTRY_IMAGE:${CONTAINER_TAG}-arm64
+    - buildah tag $CI_PROJECT_NAME:latest $CI_REGISTRY_IMAGE:latest-arm64
+    - buildah push $CI_REGISTRY_IMAGE:${CONTAINER_TAG}-arm64
+    - buildah push $CI_REGISTRY_IMAGE:latest-arm64

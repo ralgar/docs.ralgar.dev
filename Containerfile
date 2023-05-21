@@ -1,4 +1,3 @@
-FROM docker.io/nginx:latest
+FROM --platform=linux/arm64 docker.io/nginx:latest
 
-RUN rm -f /usr/share/nginx/html/*
 COPY build /usr/share/nginx/html/
