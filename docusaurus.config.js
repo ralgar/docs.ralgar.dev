@@ -68,7 +68,7 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/blog/welcome', label: 'Blog', position: 'left'},
           {
             href: 'https://gitlab.com/ralgar',
             label: 'GitLab',
@@ -107,7 +107,7 @@ const config = {
             items: [
               {
                 label: 'Blog',
-                to: '/blog',
+                to: '/blog/welcome',
               },
               {
                 label: 'GitLab',
