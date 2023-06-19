@@ -97,6 +97,10 @@ const config = {
             title: 'Contact',
             items: [
               {
+                label: 'Email',
+                href: 'mailto:me@ralgar.dev',
+              },
+              {
                 label: 'LinkedIn',
                 href: 'https://linkedin.com/in/ryanalgar',
               },
