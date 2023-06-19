@@ -7,6 +7,8 @@ sidebar_position: 1
 By following the GitOps paradigm, I am able to completely automate the
  provisioning, deployment, and operation of my homelab.
 
+Check out the [code repository](https://gitlab.com/ralgar/homelab).
+
 ## Project Features
 
 ### OpenStack Host Management
