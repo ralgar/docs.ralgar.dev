@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require('@site/static/img/monitor-coding-svgrepo-com.svg').default,
     description: (
       <>
-        Define infrastructure resources as code, keeping it documented,
+        Define infrastructure resources as code, keeping them documented,
         reproducible, and version controlled. This allows you and your team
         to...
       </>
@@ -30,7 +30,7 @@ const FeatureList = [
     Svg: require('@site/static/img/servers-svgrepo-com.svg').default,
     description: (
       <>
-        Reproducible, scalable, and secure. Automation and continuous code
+        Reliable, scalable, and secure. Automation and continuous code
         improvements lead to a better operations experience. What's not to love?
       </>
     ),

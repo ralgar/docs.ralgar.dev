@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Awesome IT Stuff',
-  tagline: 'Because DevOps is better!',
+  title: 'DevOps Insights',
+  tagline: 'Navigating the Crossroads of DevOps, Linux, and Beyond!',
   favicon: 'img/icons8-terminal-96.png',
 
   // Set the production url of your site here
@@ -56,7 +56,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'Awesome IT Stuff',
+        title: 'DevOps Insights',
         logo: {
           alt: 'My Site Logo',
           src: 'img/icons8-terminal-96.png',
@@ -90,6 +90,10 @@ const config = {
               {
                 label: 'Homelab',
                 to: '/docs/category/homelab',
+              },
+              {
+                label: 'Oracle Cloud Lab',
+                to: '/docs/category/oracle-cloud-lab',
               },
             ],
           },
