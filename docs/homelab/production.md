@@ -7,118 +7,20 @@ sidebar_position: 4
 The Production environment is a single instance that runs on Fedora CoreOS.
  It's designed to be simple, secure, and low maintenance.
 
-:::note
-
-The production environment is currently difficult to deploy, and does not have
- full CI/CD integration. The reason for this is because local modifications
- must be made to the OpenStack Terraform provider until an upstream issue is
- fixed.
-
-See the instructions below for patching the provider.
-
-:::
-
 ## Deployment
 
-### Patching the provider
+### CI/CD configuration
 
-This is a temporary workaround for an issue that needs to be fixed upstream.
+In your GitLab project, go to **Settings >> CI/CD**, and expand the
+ **Variables** section.
 
-1. Clone the OpenStack Terraform provider repository.
+1. Create a variable *file* named `OS_CLOUDS`, with the contents of your
+   `metal/output/clouds.yaml` file that you generated when configuring
+   OpenStack.
 
-   ```sh
-   git clone https://github.com/terraform-provider-openstack/terraform-provider-openstack
-   ```
+1. Create a variable *file* named `TF_VARS_FILE`, with the following contents.
 
-1. Create a patch file in the repository root with the following content.
-
-   ```patch title="terraform-provider-openstack/microversion-fix.patch"
-   From bbd9bed1bd91483233cbf8abe659aa9703d71ef1 Mon Sep 17 00:00:00 2001
-   From: Ryan Algar <59636191+ralgar@users.noreply.github.com>
-   Date: Sat, 20 May 2023 10:57:44 -0700
-   Subject: [PATCH] Fix: Multiattach microversion error
-
-   ---
-    GNUmakefile                                         | 4 +++-
-    openstack/resource_openstack_compute_instance_v2.go | 8 +-------
-    2 files changed, 4 insertions(+), 8 deletions(-)
-
-   diff --git a/GNUmakefile b/GNUmakefile
-   index bf6306cd..d5bd2436 100644
-   --- a/GNUmakefile
-   +++ b/GNUmakefile
-   @@ -7,6 +7,9 @@ default: build
-
-    build: fmtcheck
-       go install
-   +	mkdir -p ~/.terraform.d/plugins/terraform.local/openstack/1.51.1-test/linux_amd64
-   +	mv ~/go/bin/terraform-provider-openstack \
-   +		~/.terraform.d/plugins/terraform.local/openstack/1.51.1-test/linux_amd64
-
-    test: fmtcheck
-       go test -i $(TEST) || exit 1
-   @@ -57,4 +60,3 @@ endif
-       @$(MAKE) -C $(GOPATH)/src/$(WEBSITE_REPO) website-provider-test PROVIDER_PATH=$(shell pwd) PROVIDER_NAME=$(PKG_NAME)
-
-    .PHONY: build test testacc vet fmt fmtcheck errcheck test-compile website website-test
-   -
-   diff --git a/openstack/resource_openstack_compute_instance_v2.go b/openstack/resource_openstack_compute_instance_v2.go
-   index 09ca7109..5cce050c 100644
-   --- a/openstack/resource_openstack_compute_instance_v2.go
-   +++ b/openstack/resource_openstack_compute_instance_v2.go
-   @@ -554,13 +554,7 @@ func resourceComputeInstanceV2Create(ctx context.Context, d *schema.ResourceData
-               return diag.FromErr(err)
-           }
-
-   -		// Check if VolumeType was set in any of the Block Devices.
-   -		// If so, set the client's microversion appropriately.
-   -		for _, bd := range blockDevices {
-   -			if bd.VolumeType != "" {
-   -				computeClient.Microversion = computeV2InstanceBlockDeviceVolumeTypeMicroversion
-   -			}
-   -		}
-   +		computeClient.Microversion = computeV2InstanceBlockDeviceVolumeTypeMicroversion
-
-           createOpts = &bootfromvolume.CreateOptsExt{
-               CreateOptsBuilder: createOpts,
-   --
-   2.40.0
-   ```
-
-1. Checkout tag `v1.51.1`, and apply the patch against it.
-
-   ```sh
-   git checkout v1.51.1
-   git apply microversion-fix.patch
-   ```
-
-1. Build the provider using the included `GNUmakefile`.
-
-   ```sh
-   make
-   ```
-
-1. Create a `~/.terraformrc` with the following content, allowing for the
-      installation of local providers.
-
-   ```hcl title="~/.terraformrc"
-   // Allow for installation of local providers.
-   // Ex. openstack = { source = "terraform.local/local/openstack }
-   provider_installation {
-     filesystem_mirror {
-       path    = "/home/<your-user>/.terraform.d/plugins"
-     }
-     direct {
-       exclude = ["terraform.local/*/*"]
-     }
-   }
-   ```
-
-### Deploying the server
-
-1. Create a `terraform.tfvars` file in the `infra/envs/prod` directory.
-
-   ```hcl title="infra/envs/prod/terraform.tfvars"
+   ```hcl title="TF_VARS_FILE"
    restic_password = "<your-restic-repository-password>"
 
    // See https://rclone.org/drive for setup documentation.
@@ -131,16 +33,20 @@ This is a temporary workaround for an issue that needs to be fixed upstream.
    }
    ```
 
-1. Use the included `Makefile` to provision the server.
+### Run the pipeline
 
-   ```sh
-   make prod
-   ```
+1. In your GitLab project, go to **Build >> Pipelines**, and **Run pipeline**.
+
+1. Select either the `main` branch (recommended), or a tagged version
+   `>=2.0.0`.
+
+1. Choose **Run pipeline** again to begin the deployment.
 
 ## Configure the services
 
 After the initial deployment, you will need to manually configure each of the
- services.
+ services for the first time. Alternatively, if you already have a backup, you
+ can [Restore from backup](#restore-from-backup).
 
 1. SSH into the running production instance.
 
@@ -148,7 +54,7 @@ After the initial deployment, you will need to manually configure each of the
    ssh core@<server-ip-address>
    ```
 
-2. Head to the `/srv` directory, where the configurations are stored.
+1. Head to the `/srv` directory, where the configurations are stored.
 
    ```sh
    cd /srv
@@ -208,4 +114,61 @@ To configure **Mosquitto**:
    listener 1883
    password_file /mosquitto/config/passwd
    log_dest stdout
+   ```
+
+## Backup and Restore
+
+The backup and restore system uses [Restic](https://restic.net), and a shell
+ script, to perform automatic, incremental backups of configuration data and
+ service databases.
+
+:::note
+
+Due to cloud storage costs, we are not taking backups of the media volume.
+
+:::
+
+### Creating a backup
+
+There is generally no need to manually create backups, they are performed
+ automatically every night at 4:00am. If you do need to take a manual backup
+ for any reason, you can simply start the systemd service.
+
+1. SSH into the instance.
+
+   ```sh
+   ssh core@<server-ip-address>
+   ```
+
+1. Start the service.
+
+   ```sh
+   sudo systemctl start restic.service
+   ```
+
+### Restore from backup
+
+If you have an existing backup created using this system, you can easily
+ restore it to a fresh production server using a few simple commands.
+
+1. SSH into the instance.
+
+   ```sh
+   ssh core@<server-ip-address>
+   ```
+
+1. List the snapshots available for restore.
+
+   ```sh
+   sudo restic snapshots
+   ```
+
+1. Restore a snapshot directly to the local filesystem.
+
+   ```sh
+   # Restore the latest snapshot
+   sudo restic restore latest --target /
+
+   # Restore a specific snapshot using its SHA-1 ID tag
+   sudo restic restore <sha-1-id> --target /
    ```

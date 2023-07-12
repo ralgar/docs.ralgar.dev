@@ -18,10 +18,13 @@ If you want to deploy this project for yourself, there are a few things you'll
 
 1. Install the required [dependencies](#dependencies) on your local system.
 
-1. Clone the repository, and change directory into it.
+1. Sign in to your GitLab account, and
+   [fork](https://gitlab.com/ralgar/homelab/-/forks/new) my repository.
+
+1. Clone your fork to your local system, and change directory into it.
 
    ```sh
-   git clone https://gitlab.com/ralgar/homelab.git
+   git clone https://gitlab.com/<your-namespace>/homelab.git
    cd homelab
    ```
 

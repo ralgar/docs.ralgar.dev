@@ -11,13 +11,13 @@ The included Kubernetes cluster is currently in development (alpha status),
 
 ## Deployment
 
-1. Use the included `Makefile` to provision the cluster.
+1. Use the included `Makefile` to provision the cluster infrastructure.
 
    ```sh
    make cluster
    ```
 
-1. Once the cluster has finished provisioning, verify that it's operational.
+1. Once the cluster has finished provisioning, verify it is operational.
 
    ```sh
    # Set kubectl to use the output kube config file from the previous step
@@ -27,7 +27,7 @@ The included Kubernetes cluster is currently in development (alpha status),
    kubectl get pods -A
    ```
 
-   You should see Flux working to deploy applications.
+   You should see Flux working to deploy the cluster applications.
 
 ## Making changes
 
