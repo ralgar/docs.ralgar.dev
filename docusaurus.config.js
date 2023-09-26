@@ -6,12 +6,12 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'DevOps Insights',
-  tagline: 'Navigating the Crossroads of DevOps, Linux, and Beyond!',
+  title: 'docs.ralgar.dev',
+  tagline: 'In-depth documentation for my personal DevOps projects.',
   favicon: 'img/icons8-terminal-96.png',
 
   // Set the production url of your site here
-  url: 'https://ralgar.dev',
+  url: 'https://docs.ralgar.dev',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -38,11 +38,10 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
         },
-        blog: {
-          showReadingTime: true,
-        },
+        blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -56,19 +55,19 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'DevOps Insights',
+        title: 'Docs',
         logo: {
           alt: 'My Site Logo',
           src: 'img/icons8-terminal-96.png',
         },
         items: [
-          {
+          /*{
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
             label: 'Docs',
-          },
-          {to: '/blog/welcome', label: 'Blog', position: 'left'},
+          },*/
+          //{to: '/blog/welcome', label: 'Blog', position: 'left'},
           {
             href: 'https://gitlab.com/ralgar',
             label: 'GitLab',
@@ -84,7 +83,7 @@ const config = {
       footer: {
         style: 'dark',
         links: [
-          {
+          /*{
             title: 'Docs',
             items: [
               {
@@ -115,7 +114,7 @@ const config = {
             items: [
               {
                 label: 'Blog',
-                to: '/blog/welcome',
+                href: 'https://ralgar.dev',
               },
               {
                 label: 'GitLab',
@@ -126,7 +125,7 @@ const config = {
                 href: 'https://github.com/ralgar',
               },
             ],
-          },
+          },*/
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Ryan Algar`,
       },
