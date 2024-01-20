@@ -4,8 +4,8 @@ sidebar_position: 1
 
 # Overview
 
-By following the GitOps paradigm, I am able to completely automate the
- provisioning, deployment, and operation of my homelab.
+By following the [GitOps](https://about.gitlab.com/topics/gitops/) paradigm, I
+ am able to completely automate the deployment and operation of my homelab.
 
 Check out the [code repository](https://gitlab.com/ralgar/homelab).
 
