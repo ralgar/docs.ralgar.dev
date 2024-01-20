@@ -10,6 +10,7 @@ If you want to deploy this project for yourself, there are a few things you'll
 ## Dependencies
 
 - [Ansible](https://www.ansible.com/)
+  - [python-netaddr](https://pypi.org/project/netaddr)
 - [Terraform](https://www.terraform.io/)
 - [Packer](https://www.packer.io/)
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/)
