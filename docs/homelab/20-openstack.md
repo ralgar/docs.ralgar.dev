@@ -129,8 +129,9 @@ Be sure to set these correctly, otherwise the deployment will not work.
 
 ## GitLab Runner
 
-This optional step will deploy a local GitLab Runner, in a Docker container,
- directly on the OpenStack host. This can be used to run Terraform CI/CD jobs.
+This step will deploy a local GitLab Runner, in a Docker container, directly
+ on the OpenStack host. This will be used to run CI/CD jobs within your
+ network.
 
 :::caution Security Risk
 
