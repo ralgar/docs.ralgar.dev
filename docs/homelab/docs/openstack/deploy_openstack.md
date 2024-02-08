@@ -1,8 +1,8 @@
 ---
-sidebar_position: 3
+sidebar_position: 1
 ---
 
-# OpenStack Host
+# Deploying OpenStack
 
 If you don't already have an OpenStack cloud available, you can use the
  included `metal/` module to deploy a single-node lab. For multi-node

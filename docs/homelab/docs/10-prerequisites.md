@@ -29,10 +29,8 @@ You should have intermediate knowledge of the following technologies:
 If you don't already have an OpenStack cloud to deploy on, then you'll need
  some suitable hardware.
 
-import PowerEdge from '/img/poweredge_t420.png';
-
 <div class="text--center">
-    <img src={PowerEdge} alt="PowerEdge T420" style={{width: 360}} />
+    <img src={require('./.assets/poweredge_t420.png').default} alt="PowerEdge T420" style={{width: 360}} />
 </div>
 
 This project is built and tested against an old Dell T420 tower server, which
